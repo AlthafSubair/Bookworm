@@ -1,0 +1,57 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output (optional)
+dist/
+build/
+
+# Coverage reports
+coverage/
+
+# IDE/Editor folders
+.vscode/
+.idea/
+*.sw?
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# TypeScript (if using)
+*.tsbuildinfo
+
+# PM2 logs (if using PM2 for process management)
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Debug output
+debug.log
+
+# dotenv backup files
+.env.local
+.env.*.local
