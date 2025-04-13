@@ -4,11 +4,14 @@ import authRouter from './routes/authRoutes.js';
 import connectDB from './lib/connectDB.js';
 import bookRouter from './routes/bookRoutes.js';
 import cors from 'cors';
+import job from './lib/cron.js';
 
 dotenv.config();
 
 
 const app = express();
+
+job.start();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
