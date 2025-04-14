@@ -5,6 +5,7 @@ import connectDB from './lib/connectDB.js';
 import bookRouter from './routes/bookRoutes.js';
 import cors from 'cors';
 import job from './lib/cron.js';
+import bodyParser from "body-parser";
 
 dotenv.config();
 

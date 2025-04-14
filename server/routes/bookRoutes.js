@@ -6,51 +6,54 @@ import verifyToken from "../middleware/verifyToken.js";
 const router = express.Router();
 
 
-router.post("/", verifyToken, async(req, res) => {
+router.post("/", verifyToken, async (req, res) => {
     try {
+      const { title, caption, image, rating } = req.body;
+  
+      if (!title || !caption || !image || !rating) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
 
-        const { title, caption, image, rating } = req.body;
-
-        if (!title || !caption || !image || !rating) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-
-        // upload image to cloudinary
-
-        const bookImage = await cloudinary.uploader.upload(image, {
-            folder: "books"
-        });
-
-        const imageUrl = bookImage.secure_url;
-
-        const book =  new Books({
-            title,
-            caption,
-            image: imageUrl,
-            rating,
-            user: req.user._id
-        });
-
-        await book.save();
-
-        res.status(201).json({ message: "Book added successfully",
-            book
-        })
-        
+      console.log(req.user._id)
+  
+      // Upload image to Cloudinary
+      const uploadResponse = await cloudinary.uploader.upload(image, {
+        folder: 'book_covers',
+        resource_type: 'image'
+      });
+  
+      const newBook = new Books({
+        title,
+        caption,
+        image: uploadResponse.secure_url,
+        rating: Number(rating),
+        user: req.user._id
+      });
+  
+      await newBook.save();
+  
+      res.status(201).json({
+        message: "Book recommendation created successfully",
+        book: newBook
+      });
+  
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+      console.error('Error creating book:', error);
+      res.status(500).json({ 
+        message: error.response?.data?.message || "Internal server error" 
+      });
     }
-})
+  });
+  
 
 router.get("/", async(req, res) => {
     try {
-
+console.log("hhj")
         const page = req.query.page || 1;
         const limit = req.query.limit || 5;
         const skip = (page - 1) * limit;
 
-        const books = await Books.find().sort({ createdAt: -1 }).skip(skip).limit(limit).populate("username", "profileImage").exec();
+        const books = await Books.find().sort({ createdAt: -1 }).skip(skip).limit(limit).populate("user", "username profileImage").exec();
 
 
         if (!books) {
